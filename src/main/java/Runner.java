@@ -1,5 +1,6 @@
 import models.Elevator;
 import services.ElevatorService;
+import services.StatisticsService;
 import services.UserSpawnService;
 import threadTasks.UsersSpawnTask;
 import configuration.BuildingConfig;
@@ -79,5 +80,8 @@ public class Runner {
             Elevator elevator = building.getElevators().get(i);
             elevatorService.startDeliver(elevator, building.getFloors());
         }
+
+        final StatisticsService statisticsService = new StatisticsService();
+        statisticsService.startCollectStatistics(building.getFloors());
     }
 }

@@ -24,7 +24,7 @@ public class Elevator {
     public Elevator(ElevatorConfig config, int lastFloor) {
         liftingCapacity = config.getCapacity();
         elevatorSpeed = config.getSpeed();
-        currentFloor = config.getStartFloor();
+        currentFloor = Math.max(1, Math.min(config.getStartFloor(), lastFloor));
         direction = config.getStartDirection();
         this.lastFloor = lastFloor;
     }

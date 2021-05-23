@@ -27,4 +27,30 @@ public class Floor {
             queueDown.add(human);
         }
     }
+
+    public String getUpQueueString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("size: ");
+        buffer.append(queueUp.size());
+        buffer.append(" [");
+        for (Human human : queueUp) {
+            buffer.append(" ");
+            buffer.append(human.toString());
+        }
+        buffer.append("]");
+        return buffer.toString();
+    }
+
+    public String getDownQueueString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("size: ");
+        buffer.append(queueDown.size());
+        buffer.append(" [");
+        for (Human human : queueDown) {
+            buffer.append(" ");
+            buffer.append(human.toString());
+        }
+        buffer.append("]");
+        return buffer.toString();
+    }
 }

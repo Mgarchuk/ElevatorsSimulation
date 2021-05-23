@@ -29,15 +29,19 @@ public class DeliverTask extends TimerTask {
             for (Human newPassenger : currentFloor.getQueueUp()) {
                 boolean isAdded = elevator.addPassenger(newPassenger);
                 if (isAdded) {
+                    newPassenger.drop();
                     cnt++;
                 }
             }
+            currentFloor.getQueueUp().removeIf(Human::isDropped);
         } else {
             for (Human newPassenger : currentFloor.getQueueDown()) {
                 boolean isAdded = elevator.addPassenger(newPassenger);
                 if (isAdded) {
+                    newPassenger.drop();
                     cnt++;
                 }
+                currentFloor.getQueueDown().removeIf(Human::isDropped);
             }
         }
         log.info(cnt + " passengers added in floor " + elevator.getCurrentFloor());
