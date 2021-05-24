@@ -1,5 +1,6 @@
 package services;
 
+import models.Elevator;
 import models.Floor;
 import threadTasks.StatisticsTask;
 
@@ -8,8 +9,8 @@ import java.util.Timer;
 
 public class StatisticsService {
 
-    public void startCollectStatistics(List<Floor> floors) {
-        final Timer statisticsTimer = new Timer(); //ToDo: configure
-        statisticsTimer.schedule(new StatisticsTask(floors), 10000, 10000);
+    public void startCollectStatistics(List<Floor> floors, List<Elevator> elevators, int statisticsFrequency) {
+        final Timer statisticsTimer = new Timer();
+        statisticsTimer.schedule(new StatisticsTask(floors, elevators), statisticsFrequency, statisticsFrequency);
     }
 }

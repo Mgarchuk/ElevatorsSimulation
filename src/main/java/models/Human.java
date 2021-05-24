@@ -1,7 +1,6 @@
 package models;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -11,7 +10,7 @@ public class Human {
     private int requiredFloor;
     private boolean dropped;
 
-    public Human(double weight, int requiredFloor){
+    public Human(double weight, int requiredFloor) {
         this.weight = weight;
         this.requiredFloor = requiredFloor;
         this.dropped = false;

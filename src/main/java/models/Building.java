@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Getter
 @Setter
@@ -19,15 +20,14 @@ public class Building {
     public Building(BuildingConfig config) {
         this.numberOfFloors = config.getNumberOfFloors();
         this.numberOfElevators = config.getNumberOfElevators();
-        for (int i = 0; i < numberOfFloors; ++i) {
-            Floor floor = new Floor(i + 1);
-            floors.add(floor);
-        }
-        for (int i = 0; i < numberOfElevators; ++i) {
-            ElevatorConfig elevatorConfig = config.getElevatorsConfigs().get(i);
-            Elevator elevator = new Elevator(elevatorConfig, numberOfFloors);
-            elevators.add(elevator);
-        }
+        IntStream.range(0, numberOfFloors)
+                .mapToObj(i -> new Floor(i + 1))
+                .forEach(floors::add);
+
+        IntStream.range(0, numberOfElevators)
+                .mapToObj(i -> config.getElevatorsConfigs().get(i))
+                .map(elevatorConfig -> new Elevator(elevatorConfig, numberOfFloors))
+                .forEach(elevators::add);
 
     }
 }

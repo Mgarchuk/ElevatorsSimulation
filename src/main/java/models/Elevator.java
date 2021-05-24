@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -20,13 +19,24 @@ public class Elevator {
     private int currentFloor;
     private Direction direction;
     private final int lastFloor;
+    private final int doorsOpeningTime;
 
     public Elevator(ElevatorConfig config, int lastFloor) {
         liftingCapacity = config.getCapacity();
         elevatorSpeed = config.getSpeed();
         currentFloor = Math.max(1, Math.min(config.getStartFloor(), lastFloor));
         direction = config.getStartDirection();
+        doorsOpeningTime = config.getDoorsOpeningTime();
         this.lastFloor = lastFloor;
+    }
+
+    public boolean hasPassengerForExitOnFloor(Floor floor) {
+        for (Human passenger : passengers) {
+            if (passenger.getRequiredFloor() == floor.getNumber()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean addPassenger(Human human) {
@@ -37,24 +47,15 @@ public class Elevator {
         return false;
     }
 
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public double getCurrentWeight() {
-        return currentWeight;
-    }
-
-    public double getElevatorSpeed() {
-        return elevatorSpeed;
-    }
-
-    public double getLiftingCapacity() {
-        return liftingCapacity;
-    }
-
-    public int getCurrentFloor() {
-        return currentFloor;
+    public void dropPassengers() {
+        int cnt = 0;
+        for (Human passenger : passengers) {
+            if (passenger.getRequiredFloor() == currentFloor) {
+                cnt++;
+            }
+        }
+        log.info(cnt + " passengers drops from floor number " + currentFloor);
+        passengers.removeIf(p -> (p.getRequiredFloor() == currentFloor));
     }
 
     public void moveNext() {
@@ -75,14 +76,15 @@ public class Elevator {
         }
     }
 
-    public void dropPassengers() {
-        int cnt = 0;
-        for (Human passenger : passengers) {
-            if (passenger.getRequiredFloor() == currentFloor) {
-                cnt++;
+    public void changeDirectionIfNeed() {
+        if (currentFloor == lastFloor) {
+            if (direction == Direction.UP) {
+                direction = Direction.DOWN;
+            }
+        } else if (currentFloor == 1) {
+            if (direction == Direction.DOWN) {
+                direction = Direction.UP;
             }
         }
-        log.info(cnt + " passengers drops from floor number " + currentFloor);
-        passengers.removeIf(p -> (p.getRequiredFloor() == currentFloor));
     }
 }

@@ -7,9 +7,9 @@ import java.util.Timer;
 
 public class UserSpawnService {
 
-    public void startSpawnForFloor(Floor floor) {
+    public void startSpawnForFloor(Floor floor, int maxFloor, int spawnFrequency, int maxPersons, int maxWeight) {
         final Timer userSpawnTimer = new Timer();
-        userSpawnTimer.schedule(new UsersSpawnTask(floor),
-                0, 5000); // ToDo: configure
+        userSpawnTimer.schedule(new UsersSpawnTask(floor, maxFloor, maxPersons, maxWeight),
+                0, spawnFrequency);
     }
 }

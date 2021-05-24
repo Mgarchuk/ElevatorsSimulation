@@ -11,17 +11,79 @@ import java.util.Properties;
 @Slf4j
 public class ConfigUtils {
 
-    public static BuildingConfig createBuildingConfig(String configName) throws FileNotFoundException, IOException {
+    public static String getArgument(String argument, String def) {
+        int position = argument.indexOf("=");
+        if (position == -1) {
+            return def;
+        }
+
+        return argument.substring(position + 1);
+    }
+
+    public static BuildingConfig createBuildingConfig(String configName) throws IOException {
+        if (configName == null) {
+            return new BuildingConfig();
+        }
         Properties properties = new Properties();
-        InputStream inputStream = new FileInputStream(configName);
-        properties.load(inputStream);
+        try {
+            InputStream inputStream = new FileInputStream(configName);
+            properties.load(inputStream);
+        } catch (FileNotFoundException ex) {
+            return new BuildingConfig();
+        }
         return new BuildingConfig(properties);
     }
 
-    public static ElevatorConfig createElevatorConfig(String configPath) throws FileNotFoundException, IOException {
+    public static ElevatorConfig createElevatorConfig(String configPath) throws  IOException {
+        if (configPath == null) {
+            return new ElevatorConfig();
+        }
+
         Properties properties = new Properties();
-        InputStream inputStream = new FileInputStream(configPath);
-        properties.load(inputStream);
+
+        try {
+            InputStream inputStream = new FileInputStream(configPath);
+            properties.load(inputStream);
+        } catch (FileNotFoundException ex) {
+            return new ElevatorConfig();
+        }
+
         return new ElevatorConfig(properties);
+    }
+
+    public static GeneratorConfig createGeneratorConfig(String configName) throws IOException {
+        if (configName == null) {
+            return new GeneratorConfig();
+        }
+
+        Properties properties = new Properties();
+
+        try {
+            InputStream inputStream = new FileInputStream(configName);
+            properties.load(inputStream);
+        } catch (FileNotFoundException ex) {
+            return new GeneratorConfig();
+        }
+        return new GeneratorConfig(properties);
+    }
+
+    public static String getBuildingConfigName(String[] args) {
+        String configName = null;
+        for (int i = 0; i < args.length; ++i) {
+            if (args[i].startsWith("--buildingConfig=")) {
+                configName = getArgument(args[i], null);
+            }
+        }
+        return configName;
+    }
+
+    public static String getGeneratorConfigName(String[] args) {
+        String configName = null;
+        for (int i = 0; i < args.length; ++i) {
+            if (args[i].startsWith("--generatorConfig=")) {
+                configName = getArgument(args[i], null);
+            }
+        }
+        return configName;
     }
 }

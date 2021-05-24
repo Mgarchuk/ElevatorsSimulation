@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @Setter
@@ -13,6 +14,10 @@ public class Floor {
     private final int number;
     private final ConcurrentLinkedQueue<Human> queueUp = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<Human> queueDown = new ConcurrentLinkedQueue<>();
+    private boolean upSignal;
+    private boolean downSignal;
+    private AtomicLong totalAdded = new AtomicLong(0);
+    private AtomicLong totalDropped = new AtomicLong(0);
 
     public Floor(int number) {
         this.number = number;
@@ -20,16 +25,39 @@ public class Floor {
 
     public void addHumanToQueue(Human human) {
         boolean isUp = human.getRequiredFloor() > number;
-        //log.info("New human is spawned in floor number: " + number + ". Destination floor: " + human.getRequiredFloor());
         if (isUp) {
             queueUp.add(human);
-        } else {
+            upSignal = true;
+            totalAdded.incrementAndGet();
+        } else if (human.getRequiredFloor() < number){
             queueDown.add(human);
+            downSignal = true;
+            totalAdded.incrementAndGet();
+        }
+    }
+
+    public void removeFromUpQueue() {
+        int wasSize = queueUp.size();
+        queueUp.removeIf(Human::isDropped);
+        int newSize = queueUp.size();
+        totalDropped.addAndGet(wasSize - newSize);
+        if (queueUp.size() == 0) {
+            upSignal = false;
+        }
+    }
+
+    public void removeFromDownQueue() {
+        int wasSize = queueDown.size();
+        queueDown.removeIf(Human::isDropped);
+        int newSize = queueDown.size();
+        totalDropped.addAndGet(wasSize - newSize);
+        if (queueDown.size() == 0) {
+            downSignal = false;
         }
     }
 
     public String getUpQueueString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("size: ");
         buffer.append(queueUp.size());
         buffer.append(" [");
@@ -39,10 +67,11 @@ public class Floor {
         }
         buffer.append("]");
         return buffer.toString();
+
     }
 
     public String getDownQueueString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("size: ");
         buffer.append(queueDown.size());
         buffer.append(" [");
@@ -53,4 +82,5 @@ public class Floor {
         buffer.append("]");
         return buffer.toString();
     }
+
 }

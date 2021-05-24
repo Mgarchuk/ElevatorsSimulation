@@ -1,11 +1,13 @@
 package configuration;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+@Getter
 @Slf4j
 public class BuildingConfig {
     private final int numberOfFloors;
@@ -29,18 +31,9 @@ public class BuildingConfig {
             log.error("Config error");
             ex.printStackTrace();
         }
-
     }
 
-    public int getNumberOfFloors() {
-        return numberOfFloors;
-    }
-
-    public int getNumberOfElevators() {
-        return numberOfElevators;
-    }
-
-    public List<ElevatorConfig> getElevatorsConfigs() {
-        return elevatorsConfigs;
+    public BuildingConfig() {
+        this(new Properties());
     }
 }

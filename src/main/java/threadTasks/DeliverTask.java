@@ -1,5 +1,6 @@
 package threadTasks;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import models.Direction;
 import models.Elevator;
@@ -19,32 +20,52 @@ public class DeliverTask extends TimerTask {
         this.floors = floors;
     }
 
+    @SneakyThrows
     @Override
     public void run() {
-        elevator.dropPassengers();
 
+        elevator.changeDirectionIfNeed();
         Floor currentFloor = floors.get(elevator.getCurrentFloor() - 1);
-        int cnt = 0;
-        if (elevator.getDirection() == Direction.UP) {
-            for (Human newPassenger : currentFloor.getQueueUp()) {
-                boolean isAdded = elevator.addPassenger(newPassenger);
-                if (isAdded) {
-                    newPassenger.drop();
-                    cnt++;
-                }
-            }
-            currentFloor.getQueueUp().removeIf(Human::isDropped);
-        } else {
-            for (Human newPassenger : currentFloor.getQueueDown()) {
-                boolean isAdded = elevator.addPassenger(newPassenger);
-                if (isAdded) {
-                    newPassenger.drop();
-                    cnt++;
-                }
-                currentFloor.getQueueDown().removeIf(Human::isDropped);
-            }
+
+        boolean isNeedToStop = false;
+        if (currentFloor.isUpSignal() && elevator.getDirection() == Direction.UP) {
+            isNeedToStop = true;
         }
-        log.info(cnt + " passengers added in floor " + elevator.getCurrentFloor());
+        if (currentFloor.isDownSignal() && elevator.getDirection() == Direction.DOWN) {
+            isNeedToStop = true;
+        }
+        if (elevator.hasPassengerForExitOnFloor(currentFloor)) {
+            isNeedToStop = true;
+        }
+
+        if (isNeedToStop) {
+            Thread.sleep(elevator.getDoorsOpeningTime()); /// doors opening
+            elevator.dropPassengers();
+
+            int count = 0;
+            if (elevator.getDirection() == Direction.UP || currentFloor.getNumber() == 1) {
+                for (Human newPassenger : currentFloor.getQueueUp()) {
+                    boolean isAdded = elevator.addPassenger(newPassenger);
+                    if (isAdded) {
+                        newPassenger.drop();
+                        count++;
+                    }
+                }
+                currentFloor.removeFromUpQueue();
+            } else if (elevator.getDirection() == Direction.DOWN) {
+                for (Human newPassenger : currentFloor.getQueueDown()) {
+                    boolean isAdded = elevator.addPassenger(newPassenger);
+                    if (isAdded) {
+                        newPassenger.drop();
+                        count++;
+                    }
+                    currentFloor.removeFromDownQueue();
+                }
+            }
+            log.info(count + " passengers added in floor " + elevator.getCurrentFloor());
+
+            Thread.sleep(elevator.getDoorsOpeningTime()); /// doors closed
+        }
 
         elevator.moveNext();
     }
