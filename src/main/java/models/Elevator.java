@@ -12,20 +12,23 @@ import java.util.List;
 @Setter
 @Slf4j
 public class Elevator {
+
     private final double liftingCapacity;
-    private double currentWeight = 0;
     private final double elevatorSpeed;
-    private final List<Human> passengers = new ArrayList<>();
-    private int currentFloor;
-    private Direction direction;
     private final int lastFloor;
     private final int doorsOpeningTime;
+    private final List<Human> passengers = new ArrayList<>();
+    private double currentWeight = 0;
+    private int currentFloor;
+    private Direction direction;
 
     public Elevator(ElevatorConfig config, int lastFloor) {
+
         if (config.getSpeed() < 0 || lastFloor < 1 || config.getCapacity() < 0 || config.getStartFloor() < 1 ||
                 config.getStartFloor() > lastFloor || config.getDoorsOpeningTime() < 0) {
             throw new IllegalArgumentException("Wrong config");
         }
+
         liftingCapacity = config.getCapacity();
         elevatorSpeed = config.getSpeed();
         currentFloor = Math.max(1, Math.min(config.getStartFloor(), lastFloor));
@@ -44,15 +47,12 @@ public class Elevator {
     }
 
     public boolean hasPassengerForExitOnFloor(Floor floor) {
-        for (Human passenger : passengers) {
-            if (passenger.getRequiredFloor() == floor.getNumber()) {
-                return true;
-            }
-        }
-        return false;
+        return passengers.stream()
+                .anyMatch(passenger -> passenger.getRequiredFloor() == floor.getNumber());
     }
 
     public boolean addPassenger(Human human) {
+
         if (human == null) {
             return false;
         }
@@ -60,21 +60,25 @@ public class Elevator {
             passengers.add(human);
             return true;
         }
+
         return false;
     }
 
     public void dropPassengers() {
+
         int cnt = 0;
         for (Human passenger : passengers) {
             if (passenger.getRequiredFloor() == currentFloor) {
                 cnt++;
             }
         }
+
         log.info(cnt + " passengers drops from floor number " + currentFloor);
         passengers.removeIf(p -> (p.getRequiredFloor() == currentFloor));
     }
 
     public void moveNext() {
+
         if (direction == Direction.UP) {
             if (currentFloor < lastFloor) {
                 currentFloor++;
@@ -93,6 +97,7 @@ public class Elevator {
     }
 
     public void changeDirectionIfNeed() {
+
         if (currentFloor == lastFloor) {
             if (direction == Direction.UP) {
                 direction = Direction.DOWN;

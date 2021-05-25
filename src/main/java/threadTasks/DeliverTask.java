@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 @Slf4j
 public class DeliverTask extends TimerTask {
+
     private final Elevator elevator;
     private final List<Floor> floors;
 
@@ -71,13 +72,13 @@ public class DeliverTask extends TimerTask {
             elevator.moveNext();
         } else {
             boolean hasDownSignal = false, hasUpSignal = false;
-            for (int i = 0; i < floors.size(); ++i) {
-                if (floors.get(i).getNumber() < currentFloor.getNumber()) {
-                    if (floors.get(i).isUpSignal() || floors.get(i).isDownSignal()) {
+            for (Floor floor : floors) {
+                if (floor.getNumber() < currentFloor.getNumber()) {
+                    if (floor.isUpSignal() || floor.isDownSignal()) {
                         hasDownSignal = true;
                     }
-                } else if (floors.get(i).getNumber() > currentFloor.getNumber()) {
-                    if (floors.get(i).isUpSignal() || floors.get(i).isDownSignal()) {
+                } else if (floor.getNumber() > currentFloor.getNumber()) {
+                    if (floor.isUpSignal() || floor.isDownSignal()) {
                         hasUpSignal = true;
                     }
                 }
@@ -99,6 +100,5 @@ public class DeliverTask extends TimerTask {
                 }
             }
         }
-
     }
 }

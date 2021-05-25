@@ -24,7 +24,9 @@ public class Floor {
     }
 
     public void addHumanToQueue(Human human) {
+
         boolean isUp = human.getRequiredFloor() > number;
+
         if (isUp) {
             queueUp.add(human);
             upSignal = true;
@@ -37,50 +39,60 @@ public class Floor {
     }
 
     public void removeFromUpQueue() {
+
         int wasSize = queueUp.size();
         queueUp.removeIf(Human::isDropped);
+
         int newSize = queueUp.size();
         totalDropped.addAndGet(wasSize - newSize);
+
         if (queueUp.size() == 0) {
             upSignal = false;
         }
     }
 
     public void removeFromDownQueue() {
+
         int wasSize = queueDown.size();
         queueDown.removeIf(Human::isDropped);
+
         int newSize = queueDown.size();
         totalDropped.addAndGet(wasSize - newSize);
+
         if (queueDown.size() == 0) {
             downSignal = false;
         }
     }
 
     public String getUpQueueString() {
+
         StringBuilder buffer = new StringBuilder();
         buffer.append("size: ");
         buffer.append(queueUp.size());
         buffer.append(" [");
-        for (Human human : queueUp) {
+
+        queueUp.forEach(human -> {
             buffer.append(" ");
             buffer.append(human.toString());
-        }
+        });
+
         buffer.append("]");
         return buffer.toString();
-
     }
 
     public String getDownQueueString() {
+
         StringBuilder buffer = new StringBuilder();
         buffer.append("size: ");
         buffer.append(queueDown.size());
         buffer.append(" [");
-        for (Human human : queueDown) {
+
+        queueDown.forEach(human -> {
             buffer.append(" ");
             buffer.append(human.toString());
-        }
+        });
+
         buffer.append("]");
         return buffer.toString();
     }
-
 }

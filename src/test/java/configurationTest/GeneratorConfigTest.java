@@ -1,8 +1,6 @@
 package configurationTest;
 
-import configuration.ElevatorConfig;
 import configuration.GeneratorConfig;
-import models.Direction;
 import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
@@ -13,6 +11,7 @@ public class GeneratorConfigTest {
 
     @Test
     public void createGeneratorConfigTest() {
+
         Properties properties = new Properties();
         properties.setProperty("maxPersonsPerTime", "4");
         properties.setProperty("generationFrequency", "3000");
@@ -27,6 +26,7 @@ public class GeneratorConfigTest {
         assertEquals(generatorConfig.getStatisticsFrequency(), 15000);
 
         generatorConfig = new GeneratorConfig();
+
         assertEquals(generatorConfig.getMaxWeight(), 150);
         assertEquals(generatorConfig.getMaxPersonsPerTime(), 5);
         assertEquals(generatorConfig.getGenerationFrequency(), 5000);
@@ -35,38 +35,41 @@ public class GeneratorConfigTest {
 
     @Test
     public void getMaxWeightTest() {
+
         Properties properties = new Properties();
         properties.setProperty("maxWeight", "170");
-
         GeneratorConfig generatorConfig = new GeneratorConfig(properties);
+
         assertEquals(generatorConfig.getMaxWeight(), 170);
     }
 
     @Test
     public void getMaxPersonsPerTimeTest() {
+
         Properties properties = new Properties();
         properties.setProperty("maxPersonsPerTime", "4");
-
         GeneratorConfig generatorConfig = new GeneratorConfig(properties);
+
         assertEquals(generatorConfig.getMaxPersonsPerTime(), 4);
     }
 
     @Test
-    public void getGenerationFrequency() {
+    public void getGenerationFrequencyTest() {
+
         Properties properties = new Properties();
         properties.setProperty("generationFrequency", "3000");
-
         GeneratorConfig generatorConfig = new GeneratorConfig(properties);
-        assertEquals(generatorConfig.getGenerationFrequency(), 3000);
 
+        assertEquals(generatorConfig.getGenerationFrequency(), 3000);
     }
 
     @Test
-    public void getStatisticsFrequency() {
+    public void getStatisticsFrequencyTest() {
+
         Properties properties = new Properties();
         properties.setProperty("statisticsFrequency", "15000");
-
         GeneratorConfig generatorConfig = new GeneratorConfig(properties);
+
         assertEquals(generatorConfig.getStatisticsFrequency(), 15000);
     }
 }
