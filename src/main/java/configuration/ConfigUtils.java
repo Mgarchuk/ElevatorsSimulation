@@ -34,7 +34,7 @@ public class ConfigUtils {
         return new BuildingConfig(properties);
     }
 
-    public static ElevatorConfig createElevatorConfig(String configPath) throws  IOException {
+    public static ElevatorConfig createElevatorConfig(String configPath) throws IOException {
         if (configPath == null) {
             return new ElevatorConfig();
         }

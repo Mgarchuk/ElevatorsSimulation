@@ -1,11 +1,14 @@
 package modelsTest;
+
 import configuration.BuildingConfig;
 import models.Building;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class BuildingTest {
     BuildingConfig buildingConfig = new BuildingConfig();
+
     @Test
     public void createBuildingTest() {
 

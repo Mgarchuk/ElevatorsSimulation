@@ -67,6 +67,38 @@ public class DeliverTask extends TimerTask {
             Thread.sleep(elevator.getDoorsOpeningTime()); /// doors closed
         }
 
-        elevator.moveNext();
+        if (elevator.getPassengers().size() > 0) {
+            elevator.moveNext();
+        } else {
+            boolean hasDownSignal = false, hasUpSignal = false;
+            for (int i = 0; i < floors.size(); ++i) {
+                if (floors.get(i).getNumber() < currentFloor.getNumber()) {
+                    if (floors.get(i).isUpSignal() || floors.get(i).isDownSignal()) {
+                        hasDownSignal = true;
+                    }
+                } else if (floors.get(i).getNumber() > currentFloor.getNumber()) {
+                    if (floors.get(i).isUpSignal() || floors.get(i).isDownSignal()) {
+                        hasUpSignal = true;
+                    }
+                }
+            }
+
+            if (elevator.getDirection() == Direction.UP) {
+                if (hasUpSignal) {
+                    elevator.moveNext();
+                } else if (hasDownSignal) {
+                    elevator.setDirection(Direction.DOWN);
+                    elevator.moveNext();
+                }
+            } else {
+                if (hasDownSignal) {
+                    elevator.moveNext();
+                } else if (hasUpSignal) {
+                    elevator.setDirection(Direction.UP);
+                    elevator.moveNext();
+                }
+            }
+        }
+
     }
 }

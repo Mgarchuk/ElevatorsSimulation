@@ -29,7 +29,7 @@ public class Floor {
             queueUp.add(human);
             upSignal = true;
             totalAdded.incrementAndGet();
-        } else if (human.getRequiredFloor() < number){
+        } else if (human.getRequiredFloor() < number) {
             queueDown.add(human);
             downSignal = true;
             totalAdded.incrementAndGet();

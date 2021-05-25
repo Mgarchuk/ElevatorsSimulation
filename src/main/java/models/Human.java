@@ -11,13 +11,10 @@ public class Human {
     private boolean dropped;
 
     public Human(double weight, int requiredFloor) {
+        //ToDo: проверка веса на отриц, надо? тесты испр
         this.weight = weight;
         this.requiredFloor = requiredFloor;
         this.dropped = false;
-    }
-
-    public boolean isDropped() {
-        return dropped;
     }
 
     public void drop() {

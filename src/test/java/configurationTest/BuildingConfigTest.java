@@ -1,12 +1,10 @@
 package configurationTest;
 
 import configuration.BuildingConfig;
-import configuration.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 import models.Direction;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

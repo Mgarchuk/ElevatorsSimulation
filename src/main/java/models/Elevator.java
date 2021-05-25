@@ -30,6 +30,23 @@ public class Elevator {
         this.lastFloor = lastFloor;
     }
 
+    ///ToDo: переписать (доб ошибку) и переписать тесты (часть сделана)
+    //ToDo: мб другие методы тоже так проверить
+
+    public int getCurrentFloor() {
+        return currentFloor;
+    }
+
+    public void setCurrentFloor(int currentFloor) {
+        if (currentFloor <= lastFloor) {
+            this.currentFloor = currentFloor;
+        }
+
+        if (currentFloor == lastFloor) {
+            direction = Direction.DOWN;
+        }
+    }
+
     public boolean hasPassengerForExitOnFloor(Floor floor) {
         for (Human passenger : passengers) {
             if (passenger.getRequiredFloor() == floor.getNumber()) {

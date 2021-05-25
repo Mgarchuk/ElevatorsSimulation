@@ -24,10 +24,12 @@ public class Building {
                 .mapToObj(i -> new Floor(i + 1))
                 .forEach(floors::add);
 
-        IntStream.range(0, numberOfElevators)
-                .mapToObj(i -> config.getElevatorsConfigs().get(i))
-                .map(elevatorConfig -> new Elevator(elevatorConfig, numberOfFloors))
-                .forEach(elevators::add);
+        int bound = numberOfElevators;
+        for (int i = 0; i < bound; i++) {
+            ElevatorConfig elevatorConfig = config.getElevatorsConfigs().get(i);
+            Elevator elevator = new Elevator(elevatorConfig, numberOfFloors);
+            elevators.add(elevator);
+        }
 
     }
 }

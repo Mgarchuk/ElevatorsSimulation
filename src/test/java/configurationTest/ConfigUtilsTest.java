@@ -8,8 +8,6 @@ import lombok.SneakyThrows;
 import models.Direction;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -24,7 +22,7 @@ public class ConfigUtilsTest {
 
     @SneakyThrows
     @Test
-    public void createBuildingConfigTest(){
+    public void createBuildingConfigTest() {
         BuildingConfig buildingConfig = ConfigUtils.createBuildingConfig(null);
         assertEquals(buildingConfig.getNumberOfElevators(), 2);
         assertEquals(buildingConfig.getNumberOfFloors(), 9);
