@@ -13,6 +13,10 @@ public class HumanTest {
         assertEquals(human.getRequiredFloor(), 22);
         assertEquals(human.getWeight(), 123);
         assertFalse(human.isDropped());
+
+        assertThrows(IllegalArgumentException.class, () -> new Human(-123, 22));
+        assertThrows(IllegalArgumentException.class, () -> human.setRequiredFloor(-23));
+        assertThrows(IllegalArgumentException.class, () -> human.setRequiredFloor(0));
     }
 
     @Test
@@ -50,4 +54,5 @@ public class HumanTest {
         Human human = new Human(25, 2);
         assertEquals(human.toString(), "25.0");
     }
+
 }

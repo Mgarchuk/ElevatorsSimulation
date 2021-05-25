@@ -22,6 +22,10 @@ public class Elevator {
     private final int doorsOpeningTime;
 
     public Elevator(ElevatorConfig config, int lastFloor) {
+        if (config.getSpeed() < 0 || lastFloor < 1 || config.getCapacity() < 0 || config.getStartFloor() < 1 ||
+                config.getStartFloor() > lastFloor || config.getDoorsOpeningTime() < 0) {
+            throw new IllegalArgumentException("Wrong config");
+        }
         liftingCapacity = config.getCapacity();
         elevatorSpeed = config.getSpeed();
         currentFloor = Math.max(1, Math.min(config.getStartFloor(), lastFloor));
@@ -30,21 +34,13 @@ public class Elevator {
         this.lastFloor = lastFloor;
     }
 
-    ///ToDo: переписать (доб ошибку) и переписать тесты (часть сделана)
-    //ToDo: мб другие методы тоже так проверить
-
     public int getCurrentFloor() {
         return currentFloor;
     }
 
     public void setCurrentFloor(int currentFloor) {
-        if (currentFloor <= lastFloor) {
-            this.currentFloor = currentFloor;
-        }
-
-        if (currentFloor == lastFloor) {
-            direction = Direction.DOWN;
-        }
+        if (currentFloor > lastFloor || currentFloor < 1) throw new IllegalArgumentException("Wrong floor number");
+        this.currentFloor = currentFloor;
     }
 
     public boolean hasPassengerForExitOnFloor(Floor floor) {
@@ -57,6 +53,9 @@ public class Elevator {
     }
 
     public boolean addPassenger(Human human) {
+        if (human == null) {
+            return false;
+        }
         if (currentWeight + human.getWeight() <= liftingCapacity) {
             passengers.add(human);
             return true;

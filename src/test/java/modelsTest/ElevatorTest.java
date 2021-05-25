@@ -78,9 +78,8 @@ public class ElevatorTest {
         assertEquals(elevator.getPassengers().size(), 1);
         assertEquals(elevator.getPassengers().get(0).getWeight(), 100.3);
         assertEquals(elevator.getPassengers().get(0).getRequiredFloor(), 3);
-        //ToDo: сделать проверку на вес и искл
-        elevator.addPassenger(new Human(-1, 22));
-        assertEquals(elevator.getPassengers().get(1).getWeight(), -1);
+
+        assertThrows(IllegalArgumentException.class, () -> elevator.addPassenger(new Human(-1, 22)));
     }
 
     @Test
@@ -89,8 +88,7 @@ public class ElevatorTest {
         Elevator elevator = new Elevator(elevatorConfig, 10);
         elevator.setCurrentFloor(7);
         assertEquals(elevator.getCurrentFloor(), 7);
-        //ToDo: доб искл при неверных данных
-        elevator.setCurrentFloor(33);
+        assertThrows(IllegalArgumentException.class, () -> elevator.setCurrentFloor(33));
         assertEquals(elevator.getCurrentFloor(), 7);
 
     }
@@ -156,7 +154,6 @@ public class ElevatorTest {
 
     @Test
     public void moveNextTest() {
-        //ToDo: мб вынести везде эти две строчки
         ElevatorConfig elevatorConfig = buildingConfig.getElevatorsConfigs().get(0);
         Elevator elevator = new Elevator(elevatorConfig, 10);
 
@@ -177,6 +174,7 @@ public class ElevatorTest {
 
         assertEquals(elevator.getDirection(), Direction.UP);
         elevator.setCurrentFloor(10);
+        elevator.moveNext();
         assertEquals(elevator.getDirection(), Direction.DOWN);
     }
 }
